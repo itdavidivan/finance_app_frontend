@@ -1,12 +1,12 @@
 <template>
   <div class="register-container">
-    <form action="/auth/register" method="post" class="register-form">
+    <form @submit.prevent="registerUser" class="register-form">
       <h2>Create Account</h2>
       <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        v-model="email"
+        type="text"
+        name="username"
+        placeholder="Username"
+        v-model="username"
         required
       />
       <input
@@ -30,10 +30,27 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import axios from "axios";
 
-const email = ref("");
+const username = ref("");
 const password = ref("");
 const confirmPassword = ref("");
+const registerUser = async () => {
+  if (password.value !== confirmPassword.value) {
+    alert("Passwords do not match");
+    return;
+  }
+  try {
+    const response = await axios.post("http://localhost:8080/auth/register", {
+      username: username.value,
+      password: password.value,
+    });
+    alert("Registration successful");
+  } catch (error) {
+    console.error("Registration failed:", error);
+    alert("Registration failed");
+  }
+};
 </script>
 
 <style scoped>
