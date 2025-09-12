@@ -31,6 +31,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import axios from "axios";
+import axiosApiCall from "~/lib/axiosApiCall";
 
 const username = ref("");
 const password = ref("");
@@ -41,11 +42,12 @@ const registerUser = async () => {
     return;
   }
   try {
-    const response = await axios.post("http://localhost:8080/auth/register", {
+    const response = await axiosApiCall.post("/auth/register", {
       username: username.value,
       password: password.value,
     });
-    alert("Registration successful");
+    console.log("Registration successful");
+    window.location.href = "/auth/login";
   } catch (error) {
     console.error("Registration failed:", error);
     alert("Registration failed");

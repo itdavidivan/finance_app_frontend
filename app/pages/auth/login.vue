@@ -1,12 +1,12 @@
 <template>
   <div class="login-container">
-    <form action="/auth/login" method="post" class="login-form">
+    <form @submit.prevent="loginUser" class="login-form">
       <h2>Welcome Back</h2>
       <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        v-model="email"
+        type="text"
+        name="username"
+        placeholder="Username"
+        v-model="username"
         required
       />
       <input
@@ -18,17 +18,56 @@
       />
       <button type="submit">Login</button>
     </form>
+    <div v-if="message" class="message">{{ message }}</div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import axios from "axios";
 import { ref } from "vue";
+import axiosApiCall from "~/lib/axiosApiCall";
 
-const email = ref("");
+const username = ref("");
 const password = ref("");
+const message = ref("");
+
+const loginUser = async () => {
+  try {
+    const response = await axiosApiCall.post(
+      "/auth/login",
+      {
+        username: username.value,
+        password: password.value,
+      }
+      // {
+      //   headers: {
+      //     Authorization: "Bearer " + localStorage.getItem("jwt"),
+      //   },
+      // }
+    );
+    localStorage.setItem("jwt", response.data.token);
+
+    message.value = response.data.message;
+    setTimeout(() => {
+      message.value = "";
+    }, 2000);
+    // Handle successful login
+  } catch (error) {
+    // Handle login error
+  }
+};
 </script>
 
 <style scoped>
+.message {
+  color: rgb(30, 192, 30);
+  font-weight: 900;
+  text-align: center;
+  font-size: 30px;
+  position: absolute;
+  width: 100%;
+  margin: 350px 0 0 0;
+}
 .login-container {
   display: flex;
   justify-content: center;
