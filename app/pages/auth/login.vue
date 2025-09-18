@@ -24,11 +24,13 @@
 
 <script lang="ts" setup>
 import axios from "axios";
+import { useRouter } from "vue-router";
 import { ref } from "vue";
 import axiosApiCall from "~/lib/axiosApiCall";
 
 const username = ref("");
 const password = ref("");
+const router = useRouter();
 const message = ref("");
 
 const loginUser = async () => {
@@ -47,10 +49,11 @@ const loginUser = async () => {
     );
     localStorage.setItem("jwt", response.data.token);
 
-    message.value = response.data.message;
-    setTimeout(() => {
-      message.value = "";
-    }, 2000);
+    router.push("/dashboard");
+    // message.value = response.data.message;
+    // setTimeout(() => {
+
+    // }, 2000);
     // Handle successful login
   } catch (error) {
     // Handle login error
