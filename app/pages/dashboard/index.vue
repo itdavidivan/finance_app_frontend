@@ -1,108 +1,115 @@
 <template>
-  <div>YOUR FINANCE APP</div>
-  <!-- create form for adding expenses -->
-  <form @submit.prevent="addExpense">
-    <input
-      type="number"
-      v-model.number="expenseAmount"
-      placeholder="Amount"
-      required
-      step="0.01"
-    />
-    <input
-      type="text"
-      v-model="expenseDescription"
-      placeholder="Description"
-      required
-    />
-    <select v-model="expenseType" placeholder="Type" required>
-      <option value="meal">Meal</option>
-      <option value="car">Car</option>
-      <option value="house">House</option>
-    </select>
-    <button type="submit">Add Expense</button>
-  </form>
-  <div>
-    <h2>EXPENSES</h2>
-    <ul class="expenses-list">
-      <li v-for="expense in expenses" :key="expense.id" class="expense-card">
-        <div class="expense-left">
-          <span class="expense-desc">{{ expense.description }}</span>
-          <span class="expense-amount">{{ expense.amount.toFixed(2) }} €</span>
-        </div>
-        <div class="expense-right">
-          <span :class="['expense-type', expense.expenseType]">{{
-            expense.expenseType
-          }}</span>
-          <svg
-            @click="deleteExpense(expense.id)"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 640 640"
-            class="delete-icon"
+  <div class="finance-app">
+    <div class="finance-card">
+      <div class="finance-header">YOUR FINANCE APP</div>
+
+      <!-- create form for adding expenses -->
+      <form @submit.prevent="addExpense" class="expense-form">
+        <input
+          type="number"
+          v-model.number="expenseAmount"
+          placeholder="Amount"
+          required
+          step="0.01"
+        />
+        <input
+          type="text"
+          v-model="expenseDescription"
+          placeholder="Description"
+          required
+        />
+        <select v-model="expenseType" placeholder="Type" required>
+          <option value="meal">Meal</option>
+          <option value="car">Car</option>
+          <option value="house">House</option>
+        </select>
+        <button type="submit">Add Expense</button>
+      </form>
+
+      <div class="expenses-section">
+        <h2>EXPENSES</h2>
+        <ul class="expenses-list">
+          <li
+            v-for="expense in expenses"
+            :key="expense.id"
+            class="expense-card"
           >
-            <path
-              d="M232.7 69.9L224 96L128 96C110.3 96 96 110.3 96 128C96 145.7 110.3 160 128 160L512 160C529.7 160 544 145.7 544 128C544 110.3 529.7 96 512 96L416 96L407.3 69.9C402.9 56.8 390.7 48 376.9 48L263.1 48C249.3 48 237.1 56.8 232.7 69.9zM512 208L128 208L149.1 531.1C150.7 556.4 171.7 576 197 576L443 576C468.3 576 489.3 556.4 490.9 531.1L512 208z"
-            />
-          </svg>
+            <div class="expense-left">
+              <span class="expense-desc">{{ expense.description }}</span>
+              <span class="expense-amount"
+                >{{ expense.amount.toFixed(2) }} €</span
+              >
+            </div>
+            <div class="expense-right">
+              <span :class="['expense-type', expense.expenseType]">{{
+                expense.expenseType
+              }}</span>
+              <svg
+                @click="deleteExpense(expense.id)"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 640 640"
+                class="delete-icon"
+              >
+                <path
+                  d="M232.7 69.9L224 96L128 96C110.3 96 96 110.3 96 128C96 145.7 110.3 160 128 160L512 160C529.7 160 544 145.7 544 128C544 110.3 529.7 96 512 96L416 96L407.3 69.9C402.9 56.8 390.7 48 376.9 48L263.1 48C249.3 48 237.1 56.8 232.7 69.9zM512 208L128 208L149.1 531.1C150.7 556.4 171.7 576 197 576L443 576C468.3 576 489.3 556.4 490.9 531.1L512 208z"
+                />
+              </svg>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="totals-grid">
+        <div class="total-card">
+          🍽️ Meals: <strong>{{ sumMealExpenses.toFixed(2) }} €</strong>
         </div>
-      </li>
-    </ul>
-  </div>
-  <div class="totals-grid">
-    <div class="total-card">
-      🍽️ Meals: <strong>{{ sumMealExpenses.toFixed(2) }} €</strong>
-    </div>
-    <div class="total-card">
-      🚗 Car: <strong>{{ sumCarExpenses.toFixed(2) }} €</strong>
-    </div>
-    <div class="total-card">
-      🏠 House: <strong>{{ sumHouseExpenses.toFixed(2) }} €</strong>
-    </div>
-    <div class="total-card total-all">
-      💰 Total: <strong>{{ sumExpenses.toFixed(2) }} €</strong>
+        <div class="total-card">
+          🚗 Car: <strong>{{ sumCarExpenses.toFixed(2) }} €</strong>
+        </div>
+        <div class="total-card">
+          🏠 House: <strong>{{ sumHouseExpenses.toFixed(2) }} €</strong>
+        </div>
+      </div>
+      <div class="total-card total-all">
+        💰 Total: <strong>{{ sumExpenses.toFixed(2) }} €</strong>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import axiosApiCall from "~/lib/axiosApiCall";
+
 type Expense = {
   id: string;
   description: string;
   amount: number;
   expenseType: string;
 };
-const sumMealExpenses = computed(() =>
-  expenses.value
-    .filter((expense) => expense.expenseType === "meal")
-    .reduce((total, expense) => total + expense.amount, 0)
-);
-const sumCarExpenses = computed(() =>
-  expenses.value
-    .filter((expense) => expense.expenseType === "car")
-    .reduce((total, expense) => total + expense.amount, 0)
-);
-const sumHouseExpenses = computed(() =>
-  expenses.value
-    .filter((expense) => expense.expenseType === "house")
-    .reduce((total, expense) => total + expense.amount, 0)
-);
-const sumExpenses = computed(() =>
-  expenses.value.reduce((total, expense) => total + expense.amount, 0)
-);
-const deleteExpense = async (id: string) => {
-  try {
-    await axiosApiCall.delete(`/expenses/${id}`);
-    expenses.value = expenses.value.filter((expense) => expense.id !== id);
-  } catch (error) {
-    console.error("Error deleting expense:", error);
-  }
-};
+const expenses = ref<Expense[]>([]);
 const expenseDescription = ref("");
 const expenseAmount = ref(0);
 const expenseType = ref("");
-const expenses = ref<Expense[]>([]);
+
+const sumMealExpenses = computed(() =>
+  expenses.value
+    .filter((e) => e.expenseType === "meal")
+    .reduce((t, e) => t + e.amount, 0)
+);
+const sumCarExpenses = computed(() =>
+  expenses.value
+    .filter((e) => e.expenseType === "car")
+    .reduce((t, e) => t + e.amount, 0)
+);
+const sumHouseExpenses = computed(() =>
+  expenses.value
+    .filter((e) => e.expenseType === "house")
+    .reduce((t, e) => t + e.amount, 0)
+);
+const sumExpenses = computed(() =>
+  expenses.value.reduce((t, e) => t + e.amount, 0)
+);
 const addExpense = async () => {
   try {
     const response = await axiosApiCall.post("/expenses", {
@@ -110,16 +117,36 @@ const addExpense = async () => {
       amount: expenseAmount.value,
       expenseType: expenseType.value,
     });
-    console.log("Expense added:", response.data);
-    // Reset form fields
+
+    // Správne transformovať na Expense typ
+    const newExpense: Expense = {
+      id: response.data.id,
+      description: response.data.description,
+      amount: Number(response.data.amount), // dôležité!
+      expenseType: response.data.expenseType,
+    };
+
+    // Pushnúť reaktívny objekt
+    expenses.value = [...expenses.value, newExpense];
+
+    // Reset form
     expenseDescription.value = "";
     expenseAmount.value = 0;
     expenseType.value = "";
-    expenses.value = [...expenses.value, response.data];
-  } catch (error) {
-    console.error("Error adding expense:", error);
+  } catch (err) {
+    console.error(err);
   }
 };
+
+const deleteExpense = async (id: string) => {
+  try {
+    await axiosApiCall.delete(`/expenses/${id}`);
+    expenses.value = expenses.value.filter((e) => e.id !== id);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const getExpenses = async () => {
   try {
     const response = await axiosApiCall.get("/expenses");
@@ -127,94 +154,72 @@ const getExpenses = async () => {
       ...e,
       amount: Number(e.amount),
     }));
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
   }
 };
 
-onMounted(() => {
-  getExpenses();
-});
+onMounted(() => getExpenses());
 </script>
-<style>
-:root {
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --bg-light: #f3f4f6;
-  --card-bg: #ffffff;
-  --text-dark: #111827;
-  --text-light: #6b7280;
-  --border: #e5e7eb;
-}
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background: var(--bg-light);
+<style scoped>
+.finance-app {
   font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
-}
-
-/* ▸ centrálny kontajner */
-body > div {
-  /* z parent <div> urobíme centrálnu „app card“ */
-
+  min-height: 100vh;
+  background: #f3f4f6;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0;
 }
 
-/* ▸ vnútorný layout: karta s dvomi stĺpcami */
-body > div > div {
-  background: var(--card-bg);
+.finance-card {
+  background: #ffffff;
   border-radius: 1.25rem;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   padding: 2rem;
-  width: 90%;
-  max-width: 900px;
-  margin-top: 180px;
+  width: 100%;
+  max-width: 800px;
+
   display: grid;
-  grid-template-columns: 1fr 1fr;
+
+  grid-template-rows: auto 1fr auto;
   gap: 2rem;
 }
 
-/* Nadpis */
-body > div > div > div:first-child {
+.finance-header {
   grid-column: 1 / -1;
   text-align: center;
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: var(--text-dark);
+  color: #111827;
 }
 
-/* Formulár */
-form {
-  background: none;
-  box-shadow: none;
-  padding: 0;
-  display: grid;
+/* Form */
+.expense-form {
+  display: flex;
   gap: 1rem;
+  justify-content: center;
 }
 
-form input,
-form select {
+.expense-form input,
+.expense-form select {
   padding: 0.7rem 1rem;
-  border: 1px solid var(--border);
+  border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
   font-size: 1rem;
 }
 
-form input:focus,
-form select:focus {
-  border-color: var(--primary);
+.expense-form input:focus,
+.expense-form select:focus {
+  border-color: #4f46e5;
   outline: none;
   box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
 }
 
-form button {
-  background: var(--primary);
+.expense-form button {
+  background: #4f46e5;
   color: #fff;
   font-weight: 600;
   padding: 0.7rem 1rem;
@@ -224,125 +229,30 @@ form button {
   transition: background 0.2s;
 }
 
-form button:hover {
-  background: var(--primary-hover);
+.expense-form button:hover {
+  background: #4338ca;
 }
 
-/* Zoznam výdavkov */
-h2 {
-  margin: -33px 0px 1rem;
+/* Expenses */
+.expenses-section {
+  grid-column: 1/-1;
+}
+.expenses-section h2 {
   font-size: 3.3rem;
   font-weight: 700;
-  color: var(--text-dark);
+  color: #111827;
   text-align: center;
   text-shadow: 2px 6px 6px rgba(0, 0, 0, 0.5);
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 0.6rem;
-  max-height: 220px;
-  overflow-y: auto; /* jemný scroll len keď je naozaj veľa položiek */
-}
-
-li {
-  background: var(--bg-light);
-  padding: 0.6rem 0.8rem;
-  border-radius: 0.75rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.95rem;
-  border: 1px solid var(--border);
-}
-
-li button {
-  background: #ef4444;
-  color: white;
-  border: none;
-  padding: 0.35rem 0.6rem;
-  border-radius: 0.5rem;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background 0.2s;
-  width: 1.2rem;
-}
-
-li button:hover {
-  background: #dc2626;
-}
-
-/* Súhrny */
-div > div {
-  margin-top: 1rem;
-  font-weight: 500;
-  color: var(--text-light);
-}
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-svg {
-  width: 26px;
-  height: 26px;
-  fill: #ef4444;
-  cursor: pointer;
-  transition: fill 0.2s;
-}
-@media (max-width: 768px) {
-  /* na menšom displeji prepneme layout na jeden stĺpec */
-  body > div > div {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-}
-/* ▸ hlavný vnútorný kontajner (body > div > div) necháme ako grid */
-body > div > div {
-  display: grid;
-  grid-template-rows: auto 1fr auto; /* hlavička, obsah, súhrn dole */
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-}
-
-/* Súhrny roztiahneme na celú šírku (cez oba stĺpce) */
-.totals-grid {
-  grid-column: 1 / -1; /* natiahne sa cez oba stĺpce */
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: auto; /* vytlačí ho to dole */
-  width: 100%;
-}
-
-.total-card {
-  background: #eef2ff;
-  border-radius: 12px;
-  padding: 1rem;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.total-all {
-  background: #d1fae5;
 }
 
 .expenses-list {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  display: grid;
+  gap: 0.6rem;
+  max-height: 320px;
+  overflow-y: auto;
 }
 
 .expense-card {
@@ -364,16 +274,13 @@ body > div > div {
   display: flex;
   flex-direction: column;
 }
-
 .expense-desc {
   font-weight: 600;
   color: #111827;
 }
-
 .expense-amount {
   color: #6b7280;
 }
-
 .expense-right {
   display: flex;
   align-items: center;
@@ -386,19 +293,16 @@ body > div > div {
   font-size: 0.8rem;
   text-transform: capitalize;
   font-weight: 500;
-  color: white;
+  color: #fff;
 }
-
 .expense-type.meal {
-  background-color: #f97316;
+  background: #f97316;
 }
-
 .expense-type.car {
-  background-color: #3b82f6;
+  background: #3b82f6;
 }
-
 .expense-type.house {
-  background-color: #10b981;
+  background: #10b981;
 }
 
 .delete-icon {
@@ -408,8 +312,49 @@ body > div > div {
   cursor: pointer;
   transition: fill 0.2s;
 }
-
 .delete-icon:hover {
   fill: #b91c1c;
+}
+
+/* Totals grid */
+.totals-grid {
+  grid-column: 1/-1;
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.total-card {
+  background: #eef2ff;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.total-all {
+  background: #d1fae5;
+}
+
+/* Hide number spinner */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .finance-card {
+    grid-template-columns: 1fr;
+  }
+  .totals-grid {
+    flex-direction: column;
+  }
 }
 </style>
