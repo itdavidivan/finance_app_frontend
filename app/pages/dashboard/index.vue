@@ -445,8 +445,14 @@ input[type="number"] {
   }
 
   .logout-button {
-    font-size: 0.9rem;
-    margin: 0;
+    position: absolute; /* aby bol nad dashboardom */
+    top: 2px; /* ešte bližšie k vrchu */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem 0.8rem; /* menší padding */
+    font-size: 0.85rem;
+    margin: 0; /* odstráni default margin */
+    z-index: 1000;
   }
 }
 
