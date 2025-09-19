@@ -1,6 +1,7 @@
 import axios from "axios";
+
 const axiosApiCall = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "https://finance-app-be-c1f3.onrender.com", // tvoja Render URL
   headers: {
     Authorization:
       typeof window !== "undefined"
