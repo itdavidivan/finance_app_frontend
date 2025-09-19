@@ -165,7 +165,12 @@ const logout = () => {
   localStorage.removeItem("jwt");
   router.push("/auth/login"); // Redirect to login page
 };
-onMounted(() => getExpenses());
+onMounted(() => {
+  const token = localStorage.getItem("jwt");
+  if (token) {
+    getExpenses(); // Načíta údaje hneď, keď je token
+  }
+});
 </script>
 
 <style scoped>
