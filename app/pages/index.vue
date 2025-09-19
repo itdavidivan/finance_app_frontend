@@ -81,4 +81,10 @@
   background: #2a5298;
   color: #fff;
 }
+@media (max-width: 900px) {
+  .home-card {
+    margin: 2rem;
+    border-radius: 12px;
+  }
+}
 </style>

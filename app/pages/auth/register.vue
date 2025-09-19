@@ -114,4 +114,10 @@ const registerUser = async () => {
 .register-form button:hover {
   background: #1e3c72;
 }
+@media (max-width: 900px) {
+  .register-form {
+    margin: 2rem;
+    border-radius: 12px;
+  }
+}
 </style>

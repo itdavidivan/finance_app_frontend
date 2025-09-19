@@ -381,4 +381,104 @@ input[type="number"] {
     flex-direction: column;
   }
 }
+/* Existing styles remain the same */
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .finance-card {
+    padding: 1.5rem;
+  }
+
+  .expense-form {
+    flex-direction: column;
+    gap: 0.7rem;
+    align-items: stretch;
+  }
+
+  .expense-form input,
+  .expense-form select,
+  .expense-form button {
+    width: 100%;
+  }
+
+  .totals-grid {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .expenses-section h2 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .finance-card {
+    padding: 1rem;
+    width: 95%;
+  }
+
+  .expenses-section h2 {
+    font-size: 2rem;
+  }
+
+  .expense-form input,
+  .expense-form select,
+  .expense-form button {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .total-card {
+    font-size: 0.9rem;
+    padding: 0.7rem;
+  }
+
+  .delete-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .logout-button {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .finance-card {
+    padding: 0.8rem;
+  }
+
+  .expense-form {
+    gap: 0.5rem;
+  }
+
+  .expenses-section h2 {
+    font-size: 1.6rem;
+  }
+
+  .expense-form input,
+  .expense-form select,
+  .expense-form button {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+
+  .total-card {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+
+  .delete-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .logout-button {
+    top: 5px;
+    right: 5px;
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+}
 </style>

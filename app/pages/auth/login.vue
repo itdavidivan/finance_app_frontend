@@ -129,4 +129,10 @@ const loginUser = async () => {
 .login-form button:hover {
   background: #1e3c72;
 }
+@media (max-width: 900px) {
+  .login-form {
+    margin: 2rem;
+    border-radius: 12px;
+  }
+}
 </style>
