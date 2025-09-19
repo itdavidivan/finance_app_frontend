@@ -421,13 +421,18 @@ input[type="number"] {
     background: #f3f4f6;
     box-shadow: none;
   }
-
+  .finance-header {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
+  }
   .finance-app {
     min-height: 85vh;
     background: #f3f4f6;
   }
   .expenses-section h2 {
     font-size: 2rem;
+    margin-bottom: 1rem;
   }
 
   .expense-form input,
