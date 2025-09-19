@@ -412,17 +412,17 @@ input[type="number"] {
 }
 
 @media (max-width: 768px) {
-  html,
-  body {
-    overflow: hidden; /* úplne zablokuje scroll na mobile */
-    height: 100%;
-  }
   .finance-card {
-    padding: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0;
+    padding-bottom: 0;
     width: 95%;
-    overflow: hidden;
   }
 
+  .finance-app {
+    gap: 0;
+  }
   .expenses-section h2 {
     font-size: 2rem;
   }
@@ -445,8 +445,8 @@ input[type="number"] {
   }
 
   .logout-button {
-    padding: 0.7rem;
     font-size: 0.9rem;
+    margin: 0;
   }
 }
 
