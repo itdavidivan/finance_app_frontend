@@ -412,9 +412,15 @@ input[type="number"] {
 }
 
 @media (max-width: 768px) {
+  html,
+  body {
+    overflow: hidden; /* úplne zablokuje scroll na mobile */
+    height: 100%;
+  }
   .finance-card {
     padding: 1rem;
     width: 95%;
+    overflow: hidden;
   }
 
   .expenses-section h2 {
