@@ -1,4 +1,5 @@
 <template>
+  <button @click="logout" class="logout-button">Logout</button>
   <div class="finance-app">
     <div class="finance-card">
       <div class="finance-header">YOUR FINANCE APP</div>
@@ -80,6 +81,7 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted } from "vue";
 import axiosApiCall from "~/lib/axiosApiCall";
+import { useRouter } from "vue-router";
 
 type Expense = {
   id: string;
@@ -158,7 +160,11 @@ const getExpenses = async () => {
     console.log(err);
   }
 };
-
+const router = useRouter();
+const logout = () => {
+  localStorage.removeItem("jwt");
+  router.push("/auth/login"); // Redirect to login page
+};
 onMounted(() => getExpenses());
 </script>
 
@@ -346,6 +352,24 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 input[type="number"] {
   -moz-appearance: textfield;
+}
+.logout-button {
+  background: #2a5298;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  padding: 0.9rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.logout-button:hover {
+  background: #1e3c72;
 }
 
 /* Responsive */
