@@ -419,11 +419,12 @@ input[type="number"] {
     padding-bottom: 0;
     width: 95%;
     background: #f3f4f6;
+    box-shadow: none;
   }
 
   .finance-app {
     min-height: 85vh;
-    background: #ffffff;
+    background: #f3f4f6;
   }
   .expenses-section h2 {
     font-size: 2rem;
