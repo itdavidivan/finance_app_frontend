@@ -29,6 +29,9 @@
 
       <div class="expenses-section">
         <h2>EXPENSES</h2>
+        <div v-if="loading" class="loader-container">
+          <div class="loader"></div>
+        </div>
         <ul class="expenses-list">
           <li
             v-for="expense in expenses"
@@ -148,18 +151,22 @@ const deleteExpense = async (id: string) => {
     console.error(err);
   }
 };
-
+const loading = ref(false);
 const getExpenses = async () => {
   try {
+    loading.value = true;
     const response = await axiosApiCall.get("/expenses");
     expenses.value = response.data.map((e: Expense) => ({
       ...e,
       amount: Number(e.amount),
     }));
   } catch (err) {
-    console.log(err);
+    console.error(err);
+  } finally {
+    loading.value = false;
   }
 };
+
 const router = useRouter();
 const logout = () => {
   localStorage.removeItem("jwt");
@@ -325,6 +332,22 @@ onMounted(() => {
 }
 .delete-icon:hover {
   fill: #b91c1c;
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px; /* výška loader sekcie */
+}
+
+.loader {
+  border: 6px solid #e5e7eb; /* svetlý kruh */
+  border-top: 6px solid #4f46e5; /* farba animovaného segmentu */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
 }
 
 /* Totals grid */
@@ -498,6 +521,14 @@ input[type="number"] {
     right: 5px;
     padding: 0.6rem;
     font-size: 0.85rem;
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>
