@@ -418,10 +418,12 @@ input[type="number"] {
     padding-top: 0;
     padding-bottom: 0;
     width: 95%;
+    background: #f3f4f6;
   }
 
   .finance-app {
-    gap: 0;
+    min-height: 85vh;
+    background: #ffffff;
   }
   .expenses-section h2 {
     font-size: 2rem;
@@ -445,14 +447,8 @@ input[type="number"] {
   }
 
   .logout-button {
-    position: absolute; /* aby bol nad dashboardom */
-    top: 2px; /* ešte bližšie k vrchu */
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 0.5rem 0.8rem; /* menší padding */
-    font-size: 0.85rem;
-    margin: 0; /* odstráni default margin */
-    z-index: 1000;
+    font-size: 0.9rem;
+    margin: 0;
   }
 }
 
