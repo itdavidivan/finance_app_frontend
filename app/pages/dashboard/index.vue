@@ -124,7 +124,6 @@ const addExpense = async () => {
       description: expenseDescription.value,
       amount: expenseAmount.value,
       expenseType: expenseType.value,
-      createdAt: new Date().toISOString(),
     });
 
     // Správne transformovať na Expense typ
