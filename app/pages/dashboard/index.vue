@@ -182,7 +182,6 @@ onMounted(() => {
 
 <style scoped>
 .finance-app {
-  font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
   min-height: 100vh;
   background: #f3f4f6;
   display: flex;
@@ -196,8 +195,6 @@ onMounted(() => {
   border-radius: 1.25rem;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   padding: 2rem;
-  width: 100%;
-  max-width: 800px;
 
   display: grid;
 
@@ -448,6 +445,7 @@ input[type="number"] {
     width: 95%;
     background: #f3f4f6;
     box-shadow: none;
+    margin: 2rem;
   }
   .finance-header {
     font-size: 1.5rem;
@@ -530,5 +528,8 @@ input[type="number"] {
   100% {
     transform: rotate(360deg);
   }
+}
+* {
+  font-family: "Orbitron", sans-serif;
 }
 </style>
