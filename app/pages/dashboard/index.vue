@@ -48,6 +48,11 @@
               <span :class="['expense-type', expense.expenseType]">{{
                 expense.expenseType
               }}</span>
+              <span>
+                {{
+                  expense?.createdAt ? formatDayMonth(expense.createdAt) : "—"
+                }}</span
+              >
               <svg
                 @click="deleteExpense(expense.id)"
                 xmlns="http://www.w3.org/2000/svg"
@@ -91,11 +96,13 @@ type Expense = {
   description: string;
   amount: number;
   expenseType: string;
+  createdAt?: string;
 };
 const expenses = ref<Expense[]>([]);
 const expenseDescription = ref("");
 const expenseAmount = ref(0);
 const expenseType = ref("");
+const expenseCreatedAt = ref("");
 
 const sumMealExpenses = computed(() =>
   expenses.value
@@ -121,6 +128,7 @@ const addExpense = async () => {
       description: expenseDescription.value,
       amount: expenseAmount.value,
       expenseType: expenseType.value,
+      createdAt: expenseCreatedAt.value,
     });
 
     // Správne transformovať na Expense typ
@@ -142,6 +150,13 @@ const addExpense = async () => {
     console.error(err);
   }
 };
+function formatDayMonth(dateString: string) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("sk-SK", {
+    day: "numeric",
+    month: "numeric",
+  });
+}
 
 const deleteExpense = async (id: string) => {
   try {
