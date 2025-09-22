@@ -48,11 +48,7 @@
               <span :class="['expense-type', expense.expenseType]">{{
                 expense.expenseType
               }}</span>
-              <span>
-                {{
-                  expense?.createdAt ? formatDayMonth(expense.createdAt) : "—"
-                }}</span
-              >
+              <span> {{ formatDayMonth(expense.createdAt ?? "") }}</span>
               <svg
                 @click="deleteExpense(expense.id)"
                 xmlns="http://www.w3.org/2000/svg"
@@ -128,7 +124,7 @@ const addExpense = async () => {
       description: expenseDescription.value,
       amount: expenseAmount.value,
       expenseType: expenseType.value,
-      createdAt: expenseCreatedAt.value,
+      createdAt: new Date().toISOString(),
     });
 
     // Správne transformovať na Expense typ
@@ -137,6 +133,7 @@ const addExpense = async () => {
       description: response.data.description,
       amount: Number(response.data.amount), // dôležité!
       expenseType: response.data.expenseType,
+      createdAt: response.data.createdAt,
     };
 
     // Pushnúť reaktívny objekt
@@ -150,13 +147,6 @@ const addExpense = async () => {
     console.error(err);
   }
 };
-function formatDayMonth(dateString: string) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("sk-SK", {
-    day: "numeric",
-    month: "numeric",
-  });
-}
 
 const deleteExpense = async (id: string) => {
   try {
@@ -181,7 +171,13 @@ const getExpenses = async () => {
     loading.value = false;
   }
 };
-
+const formatDayMonth = (dateStr: string) => {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+  });
+};
 const router = useRouter();
 const logout = () => {
   localStorage.removeItem("jwt");
