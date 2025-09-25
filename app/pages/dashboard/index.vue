@@ -126,27 +126,30 @@ const addExpense = async () => {
       expenseType: expenseType.value,
     });
 
-    // Správne transformovať na Expense typ
     const newExpense: Expense = {
       id: response.data.id,
       description: response.data.description,
-      amount: Number(response.data.amount), // dôležité!
+      amount: Number(response.data.amount),
       expenseType: response.data.expenseType,
       createdAt: response.data.createdAt,
     };
-
-    // Pushnúť reaktívny objekt
     expenses.value = [...expenses.value, newExpense];
 
     // Reset form
     expenseDescription.value = "";
     expenseAmount.value = 0;
     expenseType.value = "";
+
+    // 🚀 Poslať emailovú notifikáciu
+    await axiosApiCall.post("/notify", {
+      to: "it.davidivan@gmail.com",
+      subject: "New Expense Added",
+      text: `You added a new expense: ${newExpense.description} - ${newExpense.amount}€`,
+    });
   } catch (err) {
     console.error(err);
   }
 };
-
 const deleteExpense = async (id: string) => {
   try {
     await axiosApiCall.delete(`/expenses/${id}`);
