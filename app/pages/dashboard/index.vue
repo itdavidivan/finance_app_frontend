@@ -136,7 +136,7 @@ const addExpense = async () => {
     };
 
     // Pushnúť reaktívny objekt
-    expenses.value = [newExpense, ...expenses.value];
+    expenses.value = [...expenses.value, newExpense];
 
     // Reset form
     expenseDescription.value = "";
