@@ -12,6 +12,7 @@
           placeholder="Amount"
           required
           step="0.01"
+          class="amount"
         />
         <input
           type="text"
@@ -40,7 +41,7 @@
           >
             <div class="expense-left">
               <span class="expense-desc">{{ expense.description }}</span>
-              <span class="expense-amount"
+              <span class="expense-amount amount"
                 >{{ expense.amount.toFixed(2) }} €</span
               >
             </div>
@@ -48,7 +49,9 @@
               <span :class="['expense-type', expense.expenseType]">{{
                 expense.expenseType
               }}</span>
-              <span> {{ formatDayMonth(expense.createdAt ?? "") }}</span>
+              <span class="amount">
+                {{ formatDayMonth(expense.createdAt ?? "") }}</span
+              >
               <svg
                 @click="deleteExpense(expense.id)"
                 xmlns="http://www.w3.org/2000/svg"
@@ -66,17 +69,20 @@
 
       <div class="totals-grid">
         <div class="total-card">
-          🍽️ Meals: <strong>{{ sumMealExpenses.toFixed(2) }} €</strong>
+          🍽️ Meals:
+          <strong class="amount">{{ sumMealExpenses.toFixed(2) }} €</strong>
         </div>
         <div class="total-card">
-          🚗 Car: <strong>{{ sumCarExpenses.toFixed(2) }} €</strong>
+          🚗 Car:
+          <strong class="amount">{{ sumCarExpenses.toFixed(2) }} €</strong>
         </div>
         <div class="total-card">
-          🏠 House: <strong>{{ sumHouseExpenses.toFixed(2) }} €</strong>
+          🏠 House:
+          <strong class="amount">{{ sumHouseExpenses.toFixed(2) }} €</strong>
         </div>
       </div>
       <div class="total-card total-all">
-        💰 Total: <strong>{{ sumExpenses.toFixed(2) }} €</strong>
+        💰 Total: <strong class="amount">{{ sumExpenses.toFixed(2) }} €</strong>
       </div>
     </div>
   </div>
@@ -191,6 +197,15 @@ onMounted(() => {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap");
 .finance-app {
   min-height: 100vh;
   background: #f3f4f6;
@@ -530,6 +545,11 @@ input[type="number"] {
     padding: 0.6rem;
     font-size: 0.85rem;
   }
+}
+.amount {
+  font-family: "Exo 2", sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 @keyframes spin {
   0% {
