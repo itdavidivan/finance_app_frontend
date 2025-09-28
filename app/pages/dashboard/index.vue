@@ -548,7 +548,7 @@ input[type="number"] {
 }
 .amount {
   font-family: "Exo 2", sans-serif;
-  font-size: 1.1rem;
+
   font-weight: bold;
 }
 @keyframes spin {
