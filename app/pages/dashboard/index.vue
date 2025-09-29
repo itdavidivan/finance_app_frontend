@@ -61,14 +61,17 @@
       </ModalWrapper>
       <!-- create form for adding expenses -->
       <form @submit.prevent="addExpense" class="expense-form">
-        <input
-          type="number"
-          v-model.number="expenseAmount"
-          placeholder="Amount"
-          required
-          step="0.01"
-          class="amount"
-        />
+        <div class="amount-wrapper">
+          <input
+            type="number"
+            v-model.number="expenseAmount"
+            placeholder="Amount"
+            required
+            step="0.01"
+            class="amount"
+          />
+          <span class="currency">€</span>
+        </div>
         <input
           type="text"
           v-model="expenseDescription"
@@ -611,6 +614,41 @@ label {
 .btn-secondary:hover {
   background-color: #d1d5db; /* gray-300 */
 }
+.expense-form input,
+.expense-form select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* EUR wrapper */
+.amount-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.amount-wrapper .amount {
+  width: 100%;
+  padding-right: 2rem; /* miesto na € */
+  height: 100%; /* nech drží výšku ako ostatné */
+  box-sizing: border-box;
+}
+
+.amount-wrapper .currency {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  color: #666;
+  pointer-events: none;
+  font-size: 1rem;
+  font-family: "Raleway", sans-serif;
+  font-weight: bold;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .finance-card {
