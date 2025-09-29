@@ -769,7 +769,7 @@ label {
   .expense-form input,
   .expense-form select,
   .expense-form button {
-    font-size: 0.9rem;
+    font-size: 1rem;
     padding: 0.6rem;
   }
 
@@ -805,8 +805,8 @@ label {
   .expense-form input,
   .expense-form select,
   .expense-form button {
-    font-size: 0.85rem;
-    padding: 0.5rem;
+    font-size: 1rem;
+    padding: 0.6rem;
   }
 
   .total-card {
