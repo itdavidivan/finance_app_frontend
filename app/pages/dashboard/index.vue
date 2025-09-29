@@ -41,6 +41,7 @@
                 <option value="meal">Meal</option>
                 <option value="car">Car</option>
                 <option value="house">House</option>
+                <option value="other">Other</option>
               </select>
             </div>
 
@@ -101,6 +102,7 @@
           <option value="meal">Meal</option>
           <option value="car">Car</option>
           <option value="house">House</option>
+          <option value="other">Other</option>
         </select>
         <button type="submit">Add Expense</button>
       </form>
@@ -168,6 +170,10 @@
           🏠 House:
           <strong class="amount">{{ sumHouseExpenses.toFixed(2) }} €</strong>
         </div>
+        <div class="total-card">
+          💰 Other:
+          <strong class="amount">{{ sumOtherExpenses.toFixed(2) }} €</strong>
+        </div>
       </div>
       <div class="total-card total-all">
         💰 Total: <strong class="amount">{{ sumExpenses.toFixed(2) }} €</strong>
@@ -230,6 +236,11 @@ const sumCarExpenses = computed(() =>
 const sumHouseExpenses = computed(() =>
   expenses.value
     .filter((e) => e.expenseType === "house")
+    .reduce((t, e) => t + e.amount, 0)
+);
+const sumOtherExpenses = computed(() =>
+  expenses.value
+    .filter((e) => e.expenseType === "other")
     .reduce((t, e) => t + e.amount, 0)
 );
 const sumExpenses = computed(() =>
@@ -470,6 +481,9 @@ onMounted(() => {
   text-transform: capitalize;
   font-weight: 500;
   color: #fff;
+  width: 70px;
+  text-align: center;
+  justify-self: center;
 }
 .expense-type.meal {
   background: #f97316;
@@ -479,6 +493,9 @@ onMounted(() => {
 }
 .expense-type.house {
   background: #10b981;
+}
+.expense-type.other {
+  background: rgb(121, 121, 121);
 }
 
 .delete-icon {
@@ -657,30 +674,26 @@ label {
   box-sizing: border-box;
 }
 
-/* EUR wrapper */
 .amount-wrapper {
   position: relative;
   width: 100%;
+  box-sizing: border-box; /* pridaj toto */
 }
 
 .amount-wrapper .amount {
   width: 100%;
   padding-right: 2rem; /* miesto na € */
-  height: 100%; /* nech drží výšku ako ostatné */
-  box-sizing: border-box;
+  box-sizing: border-box; /* dôležité! */
 }
 
 .amount-wrapper .currency {
   position: absolute;
   top: 50%;
-  right: 0.75rem;
+  right: 0.5rem;
   transform: translateY(-50%);
-  color: #666;
   pointer-events: none;
-  font-size: 1rem;
-  font-family: "Raleway", sans-serif;
-  font-weight: bold;
 }
+
 .confirm-delete p {
   text-align: center;
   font-size: 1.1rem;
