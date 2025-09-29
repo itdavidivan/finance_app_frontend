@@ -57,6 +57,25 @@
               </button>
             </div>
           </form>
+        </div> </ModalWrapper
+      ><ModalWrapper
+        v-if="isDeleteModalOpen"
+        @modalClose="isDeleteModalOpen = false"
+        width="360px"
+      >
+        <div class="confirm-delete">
+          <p>Are you sure you want to delete this expense?</p>
+          <div class="actions">
+            <button
+              class="btn btn-secondary"
+              @click="isDeleteModalOpen = false"
+            >
+              No
+            </button>
+            <button class="btn btn-primary" @click="confirmDelete">
+              Yes, Delete
+            </button>
+          </div>
         </div>
       </ModalWrapper>
       <!-- create form for adding expenses -->
@@ -112,7 +131,7 @@
               >
 
               <svg
-                @click="deleteExpense(expense.id)"
+                @click="askDelete(expense.id)"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 640 640"
                 class="delete-icon"
@@ -181,7 +200,20 @@ const expenseEditedDescription = ref("");
 const expenseEditedAmount = ref(0);
 const expenseEditedType = ref("");
 const isModalOpened = ref(false);
+const isDeleteModalOpen = ref(false);
+const selectedId = ref<string | null>(null);
 
+const askDelete = (id: string) => {
+  selectedId.value = id;
+  isDeleteModalOpen.value = true;
+};
+const confirmDelete = async () => {
+  if (selectedId.value) {
+    await deleteExpense(selectedId.value);
+    selectedId.value = null;
+  }
+  isDeleteModalOpen.value = false;
+};
 const modalClose = () => {
   isModalOpened.value = false;
 };
@@ -588,6 +620,7 @@ label {
   display: flex;
   justify-content: center;
   gap: 0.75rem;
+  margin-top: 15px;
 }
 
 .btn {
@@ -648,7 +681,11 @@ label {
   font-family: "Raleway", sans-serif;
   font-weight: bold;
 }
-
+.confirm-delete p {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
 /* Responsive */
 @media (max-width: 768px) {
   .finance-card {

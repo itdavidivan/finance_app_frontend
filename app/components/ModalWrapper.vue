@@ -64,13 +64,14 @@ const emitClose = () => emit("modalClose", false);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   position: relative;
   animation: scaleIn 0.2s ease;
+  width: 300px;
 }
 
 /* Close button */
 .modal-close {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: 0.1rem;
+  right: 0.4rem;
   border: none;
   background: transparent;
   font-size: 1.25rem;
@@ -110,6 +111,11 @@ const emitClose = () => emit("modalClose", false);
   100% {
     transform: scale(1);
     opacity: 1;
+  }
+}
+@media (max-width: 768px) {
+  .modal-content {
+    margin: 20px;
   }
 }
 </style>
