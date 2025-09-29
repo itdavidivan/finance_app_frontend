@@ -3,7 +3,57 @@
   <div class="finance-app">
     <div class="finance-card">
       <div class="finance-header">YOUR FINANCE APP</div>
+      <ModalWrapper v-model="modalValue" width="420px">
+        <div class="edit-expense-modal">
+          <h2 class="modal-title">Edit Expense</h2>
 
+          <form class="modal-form" @submit.prevent="editExpense">
+            <div class="form-group">
+              <label>Amount (€)</label>
+              <input
+                v-model.number="expenseEditedAmount"
+                type="number"
+                class="input amount"
+                placeholder="Amount"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Description</label>
+              <input
+                v-model="expenseEditedDescription"
+                type="text"
+                class="input"
+                placeholder="Description"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Type</label>
+              <select v-model="expenseEditedType" class="input" required>
+                <option value="meal">Meal</option>
+                <option value="car">Car</option>
+                <option value="house">House</option>
+              </select>
+            </div>
+
+            <div class="actions">
+              <button type="submit" class="btn btn-primary">
+                Save Changes
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="modalValue = false"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </ModalWrapper>
       <!-- create form for adding expenses -->
       <form @submit.prevent="addExpense" class="expense-form">
         <input
@@ -52,6 +102,7 @@
               <span class="amount">
                 {{ formatDayMonth(expense.createdAt ?? "") }}</span
               >
+
               <svg
                 @click="deleteExpense(expense.id)"
                 xmlns="http://www.w3.org/2000/svg"
@@ -60,6 +111,16 @@
               >
                 <path
                   d="M232.7 69.9L224 96L128 96C110.3 96 96 110.3 96 128C96 145.7 110.3 160 128 160L512 160C529.7 160 544 145.7 544 128C544 110.3 529.7 96 512 96L416 96L407.3 69.9C402.9 56.8 390.7 48 376.9 48L263.1 48C249.3 48 237.1 56.8 232.7 69.9zM512 208L128 208L149.1 531.1C150.7 556.4 171.7 576 197 576L443 576C468.3 576 489.3 556.4 490.9 531.1L512 208z"
+                />
+              </svg>
+              <svg
+                @click="openModal(expense.id)"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 640 640"
+                class="edit-icon"
+              >
+                <path
+                  d="M100.4 417.2C104.5 402.6 112.2 389.3 123 378.5L304.2 197.3L338.1 163.4C354.7 180 389.4 214.7 442.1 267.4L476 301.3L442.1 335.2L260.9 516.4C250.2 527.1 236.8 534.9 222.2 539L94.4 574.6C86.1 576.9 77.1 574.6 71 568.4C64.9 562.2 62.6 553.3 64.9 545L100.4 417.2zM156 413.5C151.6 418.2 148.4 423.9 146.7 430.1L122.6 517L209.5 492.9C215.9 491.1 221.7 487.8 226.5 483.2L155.9 413.5zM510 267.4C493.4 250.8 458.7 216.1 406 163.4L372 129.5C398.5 103 413.4 88.1 416.9 84.6C430.4 71 448.8 63.4 468 63.4C487.2 63.4 505.6 71 519.1 84.6L554.8 120.3C568.4 133.9 576 152.3 576 171.4C576 190.5 568.4 209 554.8 222.5C551.3 226 536.4 240.9 509.9 267.4z"
                 />
               </svg>
             </div>
@@ -92,6 +153,7 @@
 import { ref, computed, onMounted } from "vue";
 import axiosApiCall from "~/lib/axiosApiCall";
 import { useRouter } from "vue-router";
+import ModalWrapper from "~/components/ModalWrapper.vue";
 
 type Expense = {
   id: string;
@@ -100,11 +162,16 @@ type Expense = {
   expenseType: string;
   createdAt?: string;
 };
+const modalValue = ref(false);
 const expenses = ref<Expense[]>([]);
 const expenseDescription = ref("");
 const expenseAmount = ref(0);
 const expenseType = ref("");
 const expenseCreatedAt = ref("");
+const selectedEditId = ref("");
+const expenseEditedDescription = ref("");
+const expenseEditedAmount = ref(0);
+const expenseEditedType = ref("");
 
 const sumMealExpenses = computed(() =>
   expenses.value
@@ -174,6 +241,31 @@ const getExpenses = async () => {
     console.error(err);
   } finally {
     loading.value = false;
+  }
+};
+const editExpense = async () => {
+  try {
+    await axiosApiCall.put(`/expenses/${selectedEditId.value}`, {
+      description: expenseEditedDescription.value,
+      amount: expenseEditedAmount.value,
+      expenseType: expenseEditedType.value,
+    });
+    // Aktualizovať lokálny stav podľa potreby
+    modalValue.value = false; // Zavrieť modal
+    getExpenses(); // Obnoviť zoznam
+  } catch (err) {
+    console.error(err);
+  }
+};
+const openModal = (id: string) => {
+  // Implementovať editáciu podľa potreby
+  modalValue.value = true;
+  selectedEditId.value = id;
+  const editedExpense = expenses.value.find((e) => e.id === id);
+  if (editedExpense) {
+    expenseEditedDescription.value = editedExpense.description;
+    expenseEditedAmount.value = editedExpense.amount;
+    expenseEditedType.value = editedExpense.expenseType;
   }
 };
 const formatDayMonth = (dateStr: string) => {
@@ -355,6 +447,16 @@ onMounted(() => {
 .delete-icon:hover {
   fill: #b91c1c;
 }
+.edit-icon {
+  width: 20px;
+  height: 20px;
+  fill: #4f46e5;
+  cursor: pointer;
+  transition: fill 0.2s;
+}
+.edit-icon:hover {
+  fill: #4338ca;
+}
 
 .loader-container {
   display: flex;
@@ -421,7 +523,85 @@ input[type="number"] {
 .logout-button:hover {
   background: #1e3c72;
 }
+/* Hlavný obal modalu */
+.edit-expense-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
 
+/* Nadpis */
+.modal-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Formulár */
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Skupina label + input */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+label {
+  font-size: 0.9rem;
+  color: #374151; /* Tailwind gray-700 */
+}
+
+/* Inputy a select */
+.input {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input:focus {
+  border-color: #3b82f6; /* blue-500 */
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+/* Tlačidlá */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.btn {
+  padding: 0.55rem 1.2rem;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #3b82f6; /* blue-500 */
+  color: #fff;
+}
+.btn-primary:hover {
+  background-color: #2563eb; /* blue-600 */
+}
+
+.btn-secondary {
+  background-color: #e5e7eb; /* gray-200 */
+  color: #374151; /* gray-700 */
+}
+.btn-secondary:hover {
+  background-color: #d1d5db; /* gray-300 */
+}
 /* Responsive */
 @media (max-width: 768px) {
   .finance-card {

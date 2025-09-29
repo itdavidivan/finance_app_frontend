@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosApiCall = axios.create({
-  baseURL: process.env.BASE_URL,
+  baseURL: "https://finance-app-be-c1f3.onrender.com",
 });
 
 // interceptor pridá aktuálny token pred každým requestom
