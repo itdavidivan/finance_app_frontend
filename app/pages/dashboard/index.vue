@@ -19,6 +19,7 @@
                 type="number"
                 class="input amount"
                 placeholder="Amount"
+                step="0.01"
                 required
               />
             </div>
