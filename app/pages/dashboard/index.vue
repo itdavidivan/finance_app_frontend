@@ -688,7 +688,7 @@ label {
 
 .amount-wrapper .currency {
   position: absolute;
-  top: 50%;
+  top: 42%;
   right: 0.5rem;
   transform: translateY(-50%);
   pointer-events: none;
@@ -706,6 +706,9 @@ label {
   }
   .totals-grid {
     flex-direction: column;
+  }
+  .amount-wrapper .currency {
+    top: 50%;
   }
 }
 /* Existing styles remain the same */
@@ -744,7 +747,7 @@ label {
     padding-right: 1rem;
     padding-top: 0;
     padding-bottom: 0;
-    width: 95%;
+    width: 100%;
     background: #f3f4f6;
     box-shadow: none;
     margin: 2rem;
