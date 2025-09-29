@@ -2,6 +2,7 @@
   <div class="login-container">
     <form @submit.prevent="loginUser" class="login-form">
       <h2>Login</h2>
+
       <input
         type="text"
         name="username"
@@ -9,18 +10,41 @@
         v-model="username"
         required
       />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        v-model="password"
-        required
-      />
+
+      <!-- ZABALENÉ DO .password-wrapper -->
+      <div class="password-wrapper">
+        <input
+          :type="showPassword ? 'text' : 'password'"
+          name="password"
+          placeholder="Password"
+          v-model="password"
+          required
+        />
+        <button
+          type="button"
+          class="toggle-password"
+          @click="showPassword = !showPassword"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="currentColor"
+            viewBox="0 0 640 512"
+          >
+            <path
+              d="M320 96C185.6 96 68.77 180.1 32.05 256c36.72 75.87 153.55 160 287.95 160s251.23-84.13 287.95-160C571.23 180.1 454.4 96 320 96zm0 256a96 96 0 1 1 96-96 96.11 96.11 0 0 1-96 96z"
+            />
+          </svg>
+        </button>
+      </div>
+
       <button type="submit" class="btn">Login</button>
-      <NuxtLink to="/auth/register" class="btn secondary mt-3"
-        >Register</NuxtLink
-      >
+      <NuxtLink to="/auth/register" class="btn secondary mt-3">
+        Register
+      </NuxtLink>
     </form>
+
     <div v-if="message" class="message">{{ message }}</div>
   </div>
 </template>
@@ -32,6 +56,7 @@ import axiosApiCall from "~/lib/axiosApiCall";
 
 const username = ref("");
 const password = ref("");
+const showPassword = ref(false);
 const router = useRouter();
 const message = ref("");
 
@@ -142,6 +167,31 @@ const loginUser = async () => {
   text-align: center;
   font-size: 1.2rem;
   margin-top: 1.5rem;
+}
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 3rem; /* rezerva pre ikonku */
+}
+
+.toggle-password {
+  position: absolute;
+  top: 40%;
+  right: 1.8rem;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #4a4a4a;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-password svg {
+  pointer-events: none; /* klik sa berie na button */
 }
 
 /* Responsive */
