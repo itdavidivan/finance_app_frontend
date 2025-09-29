@@ -3,7 +3,11 @@
   <div class="finance-app">
     <div class="finance-card">
       <div class="finance-header">YOUR FINANCE APP</div>
-      <ModalWrapper v-model="modalValue" width="420px">
+      <ModalWrapper
+        v-if="isModalOpened"
+        @modalClose="isModalOpened = false"
+        width="420px"
+      >
         <div class="edit-expense-modal">
           <h2 class="modal-title">Edit Expense</h2>
 
@@ -46,7 +50,7 @@
               <button
                 type="button"
                 class="btn btn-secondary"
-                @click="modalValue = false"
+                @click="isModalOpened = false"
               >
                 Cancel
               </button>
@@ -172,7 +176,11 @@ const selectedEditId = ref("");
 const expenseEditedDescription = ref("");
 const expenseEditedAmount = ref(0);
 const expenseEditedType = ref("");
+const isModalOpened = ref(false);
 
+const modalClose = () => {
+  isModalOpened.value = false;
+};
 const sumMealExpenses = computed(() =>
   expenses.value
     .filter((e) => e.expenseType === "meal")
@@ -251,7 +259,7 @@ const editExpense = async () => {
       expenseType: expenseEditedType.value,
     });
     // Aktualizovať lokálny stav podľa potreby
-    modalValue.value = false; // Zavrieť modal
+    isModalOpened.value = false; // Zavrieť modal
     getExpenses(); // Obnoviť zoznam
   } catch (err) {
     console.error(err);
@@ -259,7 +267,7 @@ const editExpense = async () => {
 };
 const openModal = (id: string) => {
   // Implementovať editáciu podľa potreby
-  modalValue.value = true;
+  isModalOpened.value = true;
   selectedEditId.value = id;
   const editedExpense = expenses.value.find((e) => e.id === id);
   if (editedExpense) {

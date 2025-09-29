@@ -1,12 +1,8 @@
 <template>
   <Teleport to="body">
     <transition name="fade">
-      <div
-        v-if="modelValue"
-        class="modal-overlay"
-        @click="closeOnOverlay ? emitClose() : null"
-      >
-        <div class="modal-content" @click.stop :style="{ width }">
+      <div class="modal-overlay" @click="closeOnOverlay ? emitClose() : null">
+        <div class="modal-content" @click.stop>
           <!-- Close button -->
           <button v-if="showClose" class="modal-close" @click="emitClose">
             ✕
@@ -35,16 +31,15 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from "vue";
 
-const modelValue = defineModel<boolean>({ required: true });
 const props = defineProps({
-  width: { type: String, default: "500px" }, // šírka modalu
   showClose: { type: Boolean, default: true }, // zobraziť ✕ button
   closeOnOverlay: { type: Boolean, default: true }, // zavrieť klikom na pozadie
+  modalClasses: { type: String, default: "" }, // dodatočné triedy pre modal-content
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["modalClose"]);
 
-const emitClose = () => emit("update:modelValue", false);
+const emitClose = () => emit("modalClose", false);
 </script>
 
 <style scoped>
