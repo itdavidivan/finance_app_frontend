@@ -458,12 +458,12 @@ onMounted(() => {
 .edit-icon {
   width: 20px;
   height: 20px;
-  fill: #4f46e5;
+  fill: #3b82f6;
   cursor: pointer;
   transition: fill 0.2s;
 }
 .edit-icon:hover {
-  fill: #4338ca;
+  fill: #1e40af;
 }
 
 .loader-container {
