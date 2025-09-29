@@ -400,13 +400,13 @@ onMounted(() => {
 
 .expense-form input:focus,
 .expense-form select:focus {
-  border-color: #4f46e5;
+  border-color: #2a5298;
   outline: none;
   box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
 }
 
 .expense-form button {
-  background: #4f46e5;
+  background: #2a5298;
   color: #fff;
   font-weight: 600;
   padding: 0.7rem 1rem;
@@ -417,7 +417,7 @@ onMounted(() => {
 }
 
 .expense-form button:hover {
-  background: #4338ca;
+  background: #1e3c72;
 }
 
 /* Expenses */
