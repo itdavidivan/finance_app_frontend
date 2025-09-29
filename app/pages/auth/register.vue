@@ -159,6 +159,8 @@ const registerUser = async () => {
   text-align: center;
   font-size: 1.2rem;
   margin-top: 1.5rem;
+  bottom: 100px;
+  position: absolute;
 }
 
 /* Responsive */
@@ -180,6 +182,9 @@ const registerUser = async () => {
   .btn {
     font-size: 1.1rem;
     padding: 0.9rem;
+  }
+  .message {
+    margin-top: 20px;
   }
 }
 * {

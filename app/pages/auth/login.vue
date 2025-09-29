@@ -167,6 +167,8 @@ const loginUser = async () => {
   text-align: center;
   font-size: 1.2rem;
   margin-top: 1.5rem;
+  bottom: 150px;
+  position: absolute;
 }
 .password-wrapper {
   position: relative;
@@ -213,6 +215,10 @@ const loginUser = async () => {
   .btn {
     font-size: 1.1rem;
     padding: 0.9rem;
+  }
+  .message {
+    bottom: 120px;
+    margin: 10px;
   }
 }
 * {
