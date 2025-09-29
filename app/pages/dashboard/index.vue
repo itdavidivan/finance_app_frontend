@@ -690,14 +690,11 @@ label {
 
 @media (max-width: 768px) {
   .finance-card {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 0;
-    padding-bottom: 0;
-    width: 95%;
-    background: #f3f4f6;
-    box-shadow: none;
-    margin: 2rem;
+    width: 90%; /* alebo 100% */
+    margin: 1rem auto; /* centrovanie na stred */
+    padding: 1rem;
+    background: #ffffff; /* ak nechceš, aby splývala s pozadím */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
   .finance-header {
     font-size: 1.5rem;
