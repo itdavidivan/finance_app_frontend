@@ -109,11 +109,19 @@
 
       <div class="expenses-section">
         <h2>EXPENSES</h2>
+
         <select v-model="selectedMonth">
           <option :value="null">All months</option>
           <option v-for="(month, index) in months" :key="month" :value="index">
             {{ month }}
           </option>
+        </select>
+        <select v-model="selectedType">
+          <option :value="null">All types</option>
+          <option value="meal">Meal</option>
+          <option value="car">Car</option>
+          <option value="house">House</option>
+          <option value="other">Other</option>
         </select>
         <!-- <div>{{ selectedMonth }}</div> -->
         <div v-if="loading" class="loader-container">
@@ -165,6 +173,7 @@ type Expense = {
   expenseType: string;
   createdAt?: string;
 };
+
 const modalValue = ref(false);
 const expenses = ref<Expense[]>([]);
 const expenseDescription = ref("");
@@ -178,6 +187,7 @@ const expenseEditedType = ref("");
 const isModalOpened = ref(false);
 const isDeleteModalOpen = ref(false);
 const selectedId = ref<string | null>(null);
+const selectedType = ref<string | null>(null);
 const selectedMonth = ref<number | null>(null);
 const months = [
   "January",
@@ -194,13 +204,20 @@ const months = [
   "December",
 ];
 const filteredExpenses = computed(() => {
-  if (selectedMonth.value === null) return expenses.value;
-
-  return expenses.value.filter((expense) => {
-    if (!expense.createdAt) return false;
-    const expenseDate = new Date(expense.createdAt);
-    return expenseDate.getMonth() === selectedMonth.value;
-  });
+  let tempArray: Expense[] = expenses.value;
+  if (selectedMonth.value !== null) {
+    tempArray = tempArray.filter((expense) => {
+      if (!expense.createdAt) return false;
+      const expenseDate = new Date(expense.createdAt);
+      return expenseDate.getMonth() === selectedMonth.value;
+    });
+  }
+  if (selectedType.value) {
+    tempArray = tempArray.filter(
+      (expense) => expense.expenseType === selectedType.value
+    );
+  }
+  return tempArray;
 });
 const askDelete = (id: string) => {
   selectedId.value = id;
