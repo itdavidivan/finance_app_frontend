@@ -109,12 +109,20 @@
 
       <div class="expenses-section">
         <h2>EXPENSES</h2>
+        <select v-model="selectedMonth">
+          <option :value="null">All months</option>
+          <option v-for="(month, index) in months" :key="month" :value="index">
+            {{ month }}
+          </option>
+        </select>
+        <!-- <div>{{ selectedMonth }}</div> -->
         <div v-if="loading" class="loader-container">
           <div class="loader"></div>
         </div>
 
         <ExpensesList
-          :expenses="expenses"
+          :selectedMonth="selectedMonth"
+          :expenses="filteredExpenses"
           @delete="askDelete"
           @edit="openModal"
         />
@@ -170,7 +178,30 @@ const expenseEditedType = ref("");
 const isModalOpened = ref(false);
 const isDeleteModalOpen = ref(false);
 const selectedId = ref<string | null>(null);
+const selectedMonth = ref<number | null>(null);
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+const filteredExpenses = computed(() => {
+  if (selectedMonth.value === null) return expenses.value;
 
+  return expenses.value.filter((expense) => {
+    if (!expense.createdAt) return false;
+    const expenseDate = new Date(expense.createdAt);
+    return expenseDate.getMonth() === selectedMonth.value;
+  });
+});
 const askDelete = (id: string) => {
   selectedId.value = id;
   isDeleteModalOpen.value = true;
@@ -186,27 +217,27 @@ const modalClose = () => {
   isModalOpened.value = false;
 };
 const sumMealExpenses = computed(() =>
-  expenses.value
+  filteredExpenses.value
     .filter((e) => e.expenseType === "meal")
     .reduce((t, e) => t + e.amount, 0)
 );
 const sumCarExpenses = computed(() =>
-  expenses.value
+  filteredExpenses.value
     .filter((e) => e.expenseType === "car")
     .reduce((t, e) => t + e.amount, 0)
 );
 const sumHouseExpenses = computed(() =>
-  expenses.value
+  filteredExpenses.value
     .filter((e) => e.expenseType === "house")
     .reduce((t, e) => t + e.amount, 0)
 );
 const sumOtherExpenses = computed(() =>
-  expenses.value
+  filteredExpenses.value
     .filter((e) => e.expenseType === "other")
     .reduce((t, e) => t + e.amount, 0)
 );
 const sumExpenses = computed(() =>
-  expenses.value.reduce((t, e) => t + e.amount, 0)
+  filteredExpenses.value.reduce((t, e) => t + e.amount, 0)
 );
 const addExpense = async () => {
   try {

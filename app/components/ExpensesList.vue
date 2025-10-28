@@ -52,7 +52,9 @@ type Expense = {
   createdAt?: string;
 };
 
-defineProps<{ expenses: Expense[] }>();
+const props = defineProps<{
+  expenses: Expense[];
+}>();
 defineEmits<{
   (e: "delete", id: string): void;
   (e: "edit", id: string): void;
